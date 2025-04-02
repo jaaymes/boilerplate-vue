@@ -7,100 +7,59 @@ import {
   SidebarHeader,
   SidebarRail,
 } from "@/components/ui/sidebar";
+import { useAuthStore } from "@/stores/auth";
 import {
-  AudioWaveform,
-  BookOpen,
-  Bot,
-  Command,
-  Frame,
-  GalleryVerticalEnd,
-  Map,
-  PieChart,
-  Settings2,
+  BotMessageSquare,
+  LucideBrain,
+  LucideChartLine,
   SquareTerminal,
 } from "lucide-vue-next";
+import CompanySwitcher from "./CompanySwitcher.vue";
 import NavMain from "./NavMain.vue";
 import NavProjects from "./NavProjects.vue";
 import NavUser from "./NavUser.vue";
-import TeamSwitcher from "./TeamSwitcher.vue";
 const props = withDefaults(defineProps<SidebarProps>(), {
   collapsible: "icon",
 });
 // This is sample data.
 const data = {
-  user: {
-    name: "shadcn",
-    email: "m@example.com",
-    avatar: "/avatars/shadcn.jpg",
-  },
-  teams: [
-    {
-      name: "Acme Inc",
-      logo: GalleryVerticalEnd,
-      plan: "Enterprise",
-    },
-    {
-      name: "Acme Corp.",
-      logo: AudioWaveform,
-      plan: "Startup",
-    },
-    {
-      name: "Evil Corp.",
-      logo: Command,
-      plan: "Free",
-    },
-  ],
   navMain: [
     {
-      title: "Playground",
+      title: "Dashboard",
       url: "#",
       icon: SquareTerminal,
       isActive: true,
       items: [
         {
-          title: "History",
-          url: "#",
+          title: "Início",
+          url: "/dashboard",
         },
         {
-          title: "Starred",
-          url: "#",
+          title: "Usuários",
+          url: "/users",
         },
         {
-          title: "Settings",
-          url: "#",
-        },
-      ],
-    },
-    {
-      title: "Models",
-      url: "#",
-      icon: Bot,
-      items: [
-        {
-          title: "Genesis",
-          url: "#",
+          title: "Produtos",
+          url: "/products",
         },
         {
-          title: "Explorer",
-          url: "#",
-        },
-        {
-          title: "Quantum",
-          url: "#",
+          title: "Categorias",
+          url: "/categories",
         },
       ],
     },
+    // analytics
     {
-      title: "Documentation",
+      title: "Analytics",
       url: "#",
-      icon: BookOpen,
+      icon: LucideChartLine,
       items: [
         {
-          title: "Introduction",
+          title: "Introdução",
           url: "#",
         },
         {
-          title: "Get Started",
+          title: "Começar",
           url: "#",
         },
         {
@@ -108,30 +67,7 @@ const data = {
           url: "#",
         },
         {
-          title: "Changelog",
-          url: "#",
-        },
-      ],
-    },
-    {
-      title: "Settings",
-      url: "#",
-      icon: Settings2,
-      items: [
-        {
-          title: "General",
-          url: "#",
-        },
-        {
-          title: "Team",
-          url: "#",
-        },
-        {
-          title: "Billing",
-          url: "#",
-        },
-        {
-          title: "Limits",
+          title: "Comparações",
           url: "#",
         },
       ],
@@ -139,34 +75,31 @@ const data = {
   ],
   projects: [
     {
-      name: "Design Engineering",
+      name: "Chat AI",
       url: "#",
-      icon: Frame,
+      icon: BotMessageSquare,
     },
     {
-      name: "Sales & Marketing",
+      name: "Visão Computacional",
       url: "#",
-      icon: PieChart,
-    },
-    {
-      name: "Travel",
-      url: "#",
-      icon: Map,
+      icon: LucideBrain,
     },
   ],
 };
+
+const { user } = useAuthStore();
 </script>
 <template>
   <Sidebar v-bind="props">
     <SidebarHeader>
-      <TeamSwitcher :teams="data.teams" />
+      <CompanySwitcher />
     </SidebarHeader>
     <SidebarContent>
       <NavMain :items="data.navMain" />
       <NavProjects :projects="data.projects" />
     </SidebarContent>
     <SidebarFooter>
-      <NavUser :user="data.user" />
+      <NavUser :user="user" />
     </SidebarFooter>
     <SidebarRail />
   </Sidebar>

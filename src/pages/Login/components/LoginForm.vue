@@ -1,49 +1,84 @@
 <script setup lang="ts">
+import { Input } from "@/components/input";
+import { ToggleTheme } from "@/components/toggle-theme";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
-import { Input } from "@/components/ui/input";
-import { Label } from "@/components/ui/label";
 import { useAuthStore } from "@/stores/auth";
 import { GithubLogoIcon } from "@radix-icons/vue";
+import { toTypedSchema } from "@vee-validate/zod";
+import { useForm } from "vee-validate";
+import { z } from "zod";
+const { login: storeLogin } = useAuthStore();
 
-const { login } = useAuthStore();
+const schema = z.object({
+  email: z
+    .string({
+      required_error: "Email é obrigatório",
+    })
+    .email({ message: "Email inválido" }),
+  password: z
+    .string({
+      required_error: "Senha é obrigatório",
+    })
+    .min(8, { message: "minimo 8 caracteres" }),
+});
+
+const formSchema = toTypedSchema(schema);
+
+type LoginForm = z.infer<typeof schema>;
+
+const { handleSubmit } = useForm<LoginForm>({
+  validationSchema: formSchema,
+  initialValues: {
+    email: "Evans_Kozey55@yahoo.com",
+    password: "password2",
+  },
+});
+
+const onSubmit = handleSubmit(async (values) => {
+  await storeLogin(values);
+});
 </script>
 <template>
   <div class="flex flex-col gap-6">
     <Card class="overflow-hidden">
       <CardContent class="grid p-0 md:grid-cols-2">
-        <div class="p-6 md:p-8">
+        <form class="p-6 md:p-8 relative" @submit="onSubmit">
+          <ToggleTheme class="absolute right-1 top-1" />
+
           <div class="flex flex-col gap-6">
             <div class="flex flex-col items-center text-center">
-              <h1 class="text-2xl font-bold">Welcome back</h1>
+              <h1 class="text-2xl font-bold">Seja bem-vindo</h1>
               <p class="text-balance text-muted-foreground">
-                Login to your Acme Inc account
+                Faça login para continuar
               </p>
             </div>
             <div class="grid gap-2">
-              <Label for="email">Email</Label>
-              <Input id="email" type="email" placeholder="m@example.com" />
+              <Input
+                name="email"
+                label="E-mail"
+                type="email"
+                placeholder="m@example.com"
+                is-required
+              />
             </div>
             <div class="grid gap-2">
-              <div class="flex items-center">
-                <Label for="password">Password</Label>
-                <a
-                  href="#"
-                  class="ml-auto text-sm underline-offset-2 hover:underline"
-                >
-                  Forgot your password?
-                </a>
-              </div>
-              <Input id="password" type="password" />
+              <Input
+                name="password"
+                label="Senha"
+                type="password"
+                placeholder="********"
+                is-required
+              />
             </div>
-            <Button @click="login" class="w-full"> Login </Button>
+            <Button type="submit" class="w-full"> Entrar </Button>
             <div
               class="relative text-center text-sm after:absolute after:inset-0 after:top-1/2 after:z-0 after:flex after:items-center after:border-t after:border-border"
             >
               <span
                 class="relative z-10 bg-background px-2 text-muted-foreground"
               >
-                Or continue with
+                Ou continue com
               </span>
             </div>
             <div class="grid grid-cols-2 gap-4">
@@ -54,23 +89,23 @@ const { login } = useAuthStore();
                     fill="currentColor"
                   />
                 </svg>
-                <span class="sr-only">Login with Google</span>
+                <span class="sr-only">Login com Google</span>
               </Button>
               <Button variant="outline" class="w-full">
                 <GithubLogoIcon />
-                <span class="sr-only">Login with Github</span>
+                <span class="sr-only">Login com Github</span>
               </Button>
             </div>
             <div class="text-center text-sm">
-              Don&apos;t have an account?
-              <a href="#" class="underline underline-offset-4"> Sign up </a>
+              Não tem uma conta?
+              <a href="#" class="underline underline-offset-4"> Cadastre-se </a>
             </div>
           </div>
-        </div>
+        </form>
         <div class="relative hidden bg-muted md:block">
           <img
-            src="https://images.unsplash.com/photo-1511671782779-c97d3d27a1d4?q=80&w=2070&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D"
-            alt="Image"
+            src="https://images.unsplash.com/photo-1742766330337-1127275cd9b3?q=80&w=1887&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D"
+            alt="Imagem"
             class="absolute inset-0 h-full w-full object-cover dark:brightness-[0.2] dark:grayscale"
           />
         </div>
@@ -79,8 +114,9 @@ const { login } = useAuthStore();
     <div
       class="text-balance text-center text-xs text-muted-foreground [&_a]:underline [&_a]:underline-offset-4 hover:[&_a]:text-primary"
     >
-      By clicking continue, you agree to our
-      <a href="#">Terms of Service</a> and <a href="#">Privacy Policy</a>.
+      Ao continuar, você concorda com nossos
+      <a href="#">Termos de Serviço</a> e
+      <a href="#">Política de Privacidade</a>.
     </div>
   </div>
 </template>

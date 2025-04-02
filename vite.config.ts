@@ -1,17 +1,18 @@
+import tailwindcss from "@tailwindcss/vite";
 import vue from "@vitejs/plugin-vue";
-import autoprefixer from "autoprefixer";
+import dotenv from "dotenv";
 import path from "path";
-import tailwindcss from "tailwindcss";
 import { defineConfig } from "vitest/config";
+
+dotenv.config();
 
 // https://vite.dev/config/
 export default defineConfig({
-  css: {
-    postcss: {
-      plugins: [tailwindcss(), autoprefixer()],
-    },
+  define: {
+    API_URL: JSON.stringify(process.env.API_URL),
+    JWT_SECRET: JSON.stringify(process.env.JWT_SECRET),
   },
-  plugins: [vue()],
+  plugins: [vue(), tailwindcss()],
   resolve: {
     alias: {
       "@": path.resolve(__dirname, "./src"),

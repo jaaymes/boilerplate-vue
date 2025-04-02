@@ -15,21 +15,11 @@ import {
   SidebarMenuItem,
   useSidebar,
 } from "@/components/ui/sidebar";
+import type { User } from "@/interfaces/user";
 import { useAuthStore } from "@/stores/auth";
-import {
-  BadgeCheck,
-  Bell,
-  ChevronsUpDown,
-  CreditCard,
-  LogOut,
-  Sparkles,
-} from "lucide-vue-next";
+import { ChevronsUpDown, LogOut, LucideUserRoundPen } from "lucide-vue-next";
 defineProps<{
-  user: {
-    name: string;
-    email: string;
-    avatar: string;
-  };
+  user: User | null;
 }>();
 const { isMobile } = useSidebar();
 const { logout } = useAuthStore();
@@ -44,12 +34,14 @@ const { logout } = useAuthStore();
             class="data-[state=open]:bg-sidebar-accent data-[state=open]:text-sidebar-accent-foreground"
           >
             <Avatar class="h-8 w-8 rounded-lg">
-              <AvatarImage :src="user.avatar" :alt="user.name" />
-              <AvatarFallback class="rounded-lg"> CN </AvatarFallback>
+              <AvatarImage :src="user?.avatar || ''" :alt="user?.name || ''" />
+              <AvatarFallback class="rounded-lg">
+                {{ user?.name?.charAt(0) || "" }}
+              </AvatarFallback>
             </Avatar>
             <div class="grid flex-1 text-left text-sm leading-tight">
-              <span class="truncate font-semibold">{{ user.name }}</span>
-              <span class="truncate text-xs">{{ user.email }}</span>
+              <span class="truncate font-semibold">{{ user?.name || "" }}</span>
+              <span class="truncate text-xs">{{ user?.email || "" }}</span>
             </div>
             <ChevronsUpDown class="ml-auto size-4" />
           </SidebarMenuButton>
@@ -63,41 +55,33 @@ const { logout } = useAuthStore();
           <DropdownMenuLabel class="p-0 font-normal">
             <div class="flex items-center gap-2 px-1 py-1.5 text-left text-sm">
               <Avatar class="h-8 w-8 rounded-lg">
-                <AvatarImage :src="user.avatar" :alt="user.name" />
-                <AvatarFallback class="rounded-lg"> CN </AvatarFallback>
+                <AvatarImage
+                  :src="user?.avatar || ''"
+                  :alt="user?.name || ''"
+                />
+                <AvatarFallback class="rounded-lg">
+                  {{ user?.name?.charAt(0) || "" }}
+                </AvatarFallback>
               </Avatar>
               <div class="grid flex-1 text-left text-sm leading-tight">
-                <span class="truncate font-semibold">{{ user.name }}</span>
-                <span class="truncate text-xs">{{ user.email }}</span>
+                <span class="truncate font-semibold">{{
+                  user?.name || ""
+                }}</span>
+                <span class="truncate text-xs">{{ user?.email || "" }}</span>
               </div>
             </div>
           </DropdownMenuLabel>
           <DropdownMenuSeparator />
           <DropdownMenuGroup>
             <DropdownMenuItem>
-              <Sparkles />
-              Upgrade to Pro
-            </DropdownMenuItem>
-          </DropdownMenuGroup>
-          <DropdownMenuSeparator />
-          <DropdownMenuGroup>
-            <DropdownMenuItem>
-              <BadgeCheck />
-              Account
-            </DropdownMenuItem>
-            <DropdownMenuItem>
-              <CreditCard />
-              Billing
-            </DropdownMenuItem>
-            <DropdownMenuItem>
-              <Bell />
-              Notifications
+              <LucideUserRoundPen />
+              Perfil
             </DropdownMenuItem>
           </DropdownMenuGroup>
           <DropdownMenuSeparator />
           <DropdownMenuItem @click="logout">
             <LogOut />
-            Log out
+            Sair
           </DropdownMenuItem>
         </DropdownMenuContent>
       </DropdownMenu>

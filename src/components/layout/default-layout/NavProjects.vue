@@ -20,7 +20,6 @@ import {
   Forward,
   type LucideIcon,
   MoreHorizontal,
-  Trash2,
 } from "lucide-vue-next";
 defineProps<{
   projects: {
@@ -56,25 +55,15 @@ const { isMobile } = useSidebar();
           >
             <DropdownMenuItem>
               <Folder class="text-muted-foreground" />
-              <span>View Project</span>
+              <span>Ver Projeto</span>
             </DropdownMenuItem>
             <DropdownMenuItem>
               <Forward class="text-muted-foreground" />
-              <span>Share Project</span>
+              <span>Compartilhar Projeto</span>
             </DropdownMenuItem>
             <DropdownMenuSeparator />
-            <DropdownMenuItem>
-              <Trash2 class="text-muted-foreground" />
-              <span>Delete Project</span>
-            </DropdownMenuItem>
           </DropdownMenuContent>
         </DropdownMenu>
-      </SidebarMenuItem>
-      <SidebarMenuItem>
-        <SidebarMenuButton class="text-sidebar-foreground/70">
-          <MoreHorizontal class="text-sidebar-foreground/70" />
-          <span>More</span>
-        </SidebarMenuButton>
       </SidebarMenuItem>
     </SidebarMenu>
   </SidebarGroup>
